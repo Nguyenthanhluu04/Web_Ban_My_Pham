@@ -1,3 +1,8 @@
+<?php
+session_start();
+$customer_id = $_COOKIE['customer_id'] ?? null;   
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +13,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="./assets/css/base.css">
     <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="stylesheet" href="./assets/css/grid.css">
+    <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.4.0-web/css/all.min.css"> 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-   
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
 
@@ -98,11 +107,12 @@
                 Trợ Giúp
             </a>
         </li>
+        
         <div class="modal" id="modal_1" >
             <div class="modal__overlay" id="overlay"></div>
                 <div class="modal__body"> 
                     <!-- Register form -->
-                    <div class="auth-form__register" id="register" action="xulylogin.php" method="POST">
+                    <form  action="/Controller/xulyRegister.php"  method="POST" class="auth-form__register" id="register" >
                         <div class="auth-form__container">
                             <div class="auth-form__header">
                             <h3 class="auth-form__heading">Đăng ký</h3>
@@ -110,13 +120,13 @@
                             </div>
                         <div class="auth-form__form">
                             <div class="auth-form__group">
-                                <input type="text" class="auth-form__input" placeholder="Nhập Email của bạn">
+                                <input type="text" name="createName" class="auth-form__input" placeholder="Nhập tên tài khoản của bạn">
                             </div>
                             <div class="auth-form__group">
-                                <input type="password" class="auth-form__input" placeholder="Nhập mật khẩu của bạn">
+                                <input type="email"name="createEmail" class="auth-form__input" placeholder="Nhập email hoặc số điện thoại của bạn">
                             </div>
                             <div class="auth-form__group">
-                                <input type="password" class="auth-form__input" placeholder="Nhập lại mật khẩu">
+                                <input type="password"name="createPass" class="auth-form__input" placeholder="Nhập mật khẩu của bạn">
                             </div>
                         </div>
                         <div class="auth-form__aside">
@@ -126,9 +136,9 @@
                                 <a href="" class="auth-form__text-link">Chính sách bảo mật</a>
                             </p>
                         </div>
-                        <div class="auth-form__controls">
+                        <div class="auth-form__controls">  
                             <span class="btn btn--back" id="come-back__register">TRỞ LẠI </span>
-                            <button class="btn btn--primary ">ĐĂNG KÝ </button>
+                            <button class="btn btn--primary" id="btn-register">ĐĂNG KÝ </button>                     
                         </div>
                         </div>
                             <div class="auth-form__socials ">
@@ -145,10 +155,10 @@
                                     </span>
                                 </a>
                         </div>
-                    </div>
+                    </form>
         
                     <!-- Login form -->
-                    <form action="xulylogin.php" method="POST" class="auth_form__login" id="login">
+                    <form action="/Controller/xulylogin.php" method="POST" class="auth_form__login" id="login">
                         <div class="auth-form__container">
                             <div class="auth-form__header">
                             <h3 class="auth-form__heading">Đăng nhập</h3>
@@ -156,12 +166,11 @@
                             </div>
                         <div class="auth-form__form">
                             <div class="auth-form__group">
-                                <input type="text" name="inputuser" class="auth-form__input" placeholder="Nhập Email của bạn">
+                                <input type="email" name="inputuser" class="auth-form__input" placeholder="Nhập Email của bạn">
                             </div>
                             <div class="auth-form__group">
                                 <input type="password" name="inputpass" class="auth-form__input" placeholder="Nhập mật khẩu của bạn">
                             </div>
-                           
                         </div>
                         <div class="auth-form__help">
                             <a href="" class="auth-form__help-link auth-form__help-fogot ">Quên mật khẩu</a>
@@ -170,7 +179,7 @@
                         </div>
                         <div class="auth-form__controls">
                             <span class="btn btn--back" id="come-back">TRỞ LẠI </span>
-                            <!-- <button class="btn btn--back" id="come-back">TRỞ LẠI </button> -->
+                            
                             <button class="btn btn--primary " id="btn-login">ĐĂNG NHẬP </button>
                             
                             
@@ -194,133 +203,43 @@
                     </form> 
             </div>
         </div> 
-        <li class="header__navbar-item header__navbar-item-strong header__navbar-item-separate" id="Register">Đăng Ký</li>
-        <li class="header__navbar-item header__navbar-item-strong" id="Login" > Đăng Nhập </li>
-       <!-- chi tiết đơn hàng -->
-       <div class="detail" id="detail-overlay">
-                       <div class="detail__overlay" ></div>
-                          <div class="detail__body"> 
-                            <div class="detail__container" id="detail-id">
-                               <div class="detail__img" style="background-image: url(https://studiovietnam.com/wp-content/uploads/2022/08/mau-anh-chup-my-pham-02-1024x1024.jpg);">
-                               </div>
-                               <div class="detail__content">
-                                    <h2 class="detail__name">
-                                        kem dưỡng da mặt nhãn hàng ohui cao cấp đến từ Hàn Quốc
-                                    </h2>
-                                 <div class="detail__infor">
-                                        <div class="detail__infor-percentStar">
-                                            <span class="detail__infor-percent">4.7</span>
-                                                <div class="detail__infor-star">
-                                                        <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                                </div>
-                                        </div>
-                                       <div class="detail__infor-Evaluate">
-                                        <span class="detail__infor-Evaluate__number">1.5k</span>
-                                        <span class="detail__infor-Evaluate__letter">Đánh Giá</span>
-                                       </div>
-                                       <div class="detail__infor-sold">
-                                        <span class="detail__infor-sold__number"> 5k</span>
-                                        <span class="detail__infor-sold__letter">Đã Bán</span>
-                                        
-                                       </div>
-                                    </div>
-                                    <div class="detail__price">
-                                        <span class="detail__price-old">1.499.000đ</span>
-                                        <span class="detail__price-curent">999.000đ</span>
-                                        <span class="detail__price-sale">35% GIẢM</span>
-                                    </div>
-                                    <div class="detail__shopDiscounts">
-                                        <span class="detail__title">Mã Giảm của Shop</span>
-                                       <ul class="detail__shopDiscounts-list"> 
-                                        <li class="detail__shopDiscounts-item">Giảm 10k</li>
-                                        <li class="detail__shopDiscounts-item">Giảm 20k</li>
-                                        <li class="detail__shopDiscounts-item">Giảm 5%</li>
-                                      </ul>
-                                    </div>
-                                    <div class="detail__deal">
-                                        <span class="detail__deal-title">Deal sốc</span>
-                                        <span class="detail__deal-item">Mua kèm Deal Sốc</span>
-                                    </div>
-                                        <div class="detail__classify">
-                                            <span class="detail__classify-title">Kích Cỡ</span>
-                                            <ul class="detail__classify-list"> 
-                                                <li class="detail__classify-item">
-                                                    <div class="detail__classify-item__content">
-                                                    <div class="detail__classify-item-img" style="background-image: url(https://studiovietnam.com/wp-content/uploads/2022/08/mau-anh-chup-my-pham-02-1024x1024.jpg);">
-                                                </div>
-                                                <span class="detail__classify-item-letter">Kích Cỡ - 60ml</span>
-                                                </div>
-                                                </li>
-                                                <li class="detail__classify-item">
-                                                    <div class="detail__classify-item__content">
-                                                    <div class="detail__classify-item-img" style="background-image: url(https://studiovietnam.com/wp-content/uploads/2022/08/mau-anh-chup-my-pham-02-1024x1024.jpg);">
-                                                </div>
-                                                <span class="detail__classify-item-letter">Kích Cỡ - 80ml</span>
-                                                </div>
-                                                </li>    
-                                                <li class="detail__classify-item">
-                                                    <div class="detail__classify-item__content">
-                                                    <div class="detail__classify-item-img" style="background-image: url(https://studiovietnam.com/wp-content/uploads/2022/08/mau-anh-chup-my-pham-02-1024x1024.jpg);">
-                                                </div>
-                                                <span class="detail__classify-item-letter">Kích Cỡ - 100ml</span>
-                                                </div>
-                                                </li>
-                                                <li class="detail__classify-item">
-                                                    <div class="detail__classify-item__content">
-                                                    <div class="detail__classify-item-img" style="background-image: url(https://studiovietnam.com/wp-content/uploads/2022/08/mau-anh-chup-my-pham-02-1024x1024.jpg);">
-                                                </div>
-                                                <span class="detail__classify-item-letter">Kích Cỡ - 120ml</span>
-                                                </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                         <div class="detail__quantity">
-                                            <span class="detail__quantity-title">Số Lượng</span>
-                                            <div class="detail__quantity-container">
-                                            <div class="detail__quantity-content">
-                                                <span class="detail__quantity-content__minus"><i class="fa-solid fa-minus detail__quantity-content__minus-icon" ></i></span>
-                                                <span class="detail__quantity-content__show">1</span>
-                                                <span class="detail__quantity-content__add"><i class="fa-solid fa-plus"></i></span>          
-                                            </div>    
-                                        </div> 
-                                        <span class="detail__quantity-product">686 sản phẩm có sẵn</span>                            
-                                         </div>
-                                            <div class="detail__select">
-                                                <button class="detail__select-addCart">
-                                                    <i class="fa-solid fa-cart-shopping detail__select-addCart-icon"></i>
-                                                    Thêm Vào Giỏ Hàng
-                                                </button>
-                                               <button class="detail__select-buy">Mua Ngay</button>
-                                            </div>
-                                    </div>
-                                  
-                             </div>
-                         </div>
-                  </div> 
 
         <script src="./assets/javascript/login.js"></script>
+        <?php 
+        if(!isset($_COOKIE['customer_id'])){
+          echo  '<li class="header__navbar-item header__navbar-item-strong header__navbar-item-separate" id="Register">Đăng Ký</li>';
+           echo  ' <li class="header__navbar-item header__navbar-item-strong" id="Login" > Đăng Nhập </li>';
+        }
+        ?>
        
-      
-      
+
        <li class="header__navbar-item header__navbar-user">
-        <img src="" alt="" class="header__navbar-user-img">
-        <span class="header__navbar-user-name">Thành Lưu</span>
+       
+            <?php
+              // Lấy giá trị của cookie 'customer_id'
+               if(isset($_COOKIE['customer_id'] , $_COOKIE['customer_name'])) {
+                 $customer_name = $_COOKIE['customer_name'];
+            
+                 echo '<img src="https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-260nw-1913928688.jpg" alt="" class="header__navbar-user-img ">';
+                 echo '<span class="header__navbar-user-name">' . $customer_name.'</span>';
+                }
+            ?>
+      
         <ul class="header__navbar-user-menu">
             <li class="header__navbar-user-item">
                 <a href="">Tài khoản của tôi</a>
             </li>
             <li class="header__navbar-user-item">
-                <a href="">Địa chỉ của tôi</a>
+                <a href="/View_Admin/loginAdmin.html">Tài khoản Admin</a>
             </li>
             <li class="header__navbar-user-item">
-                <a href="">Đơn mua</a>
+                <a href="/View/diachi.php">Địa chỉ của tôi</a>
+            </li>
+            <li class="header__navbar-user-item">
+                <a href="/View/donMua.php">Đơn mua</a>
             </li>
             <li class="header__navbar-user-item header__navbar-user-item--separate ">
-                <a href="">Đăng xuất</a>
+                <a href="/Controller/xulylogout.php?logout=true">Đăng xuất</a>
             </li>
         </ul>
     </li>
@@ -328,21 +247,25 @@
    </nav>
    <div class="header-with-search">
             <div class="header__logo">
-                <a href="/" class="header__logo-link">
-                <svg viewBox="0 0 192 65" class="header__logo-img">
+                <a href="#" class="header__logo-link">
+                 
+                <!-- <svg viewBox="0 0 192 65" class="header__logo-img">
                     <g fill-rule="evenodd">                
                         <path fill="#fff" d="M35.6717403 44.953764c-.3333497 2.7510509-2.0003116 4.9543414-4.5823845 6.0575984-1.4379707.6145919-3.36871.9463856-4.896954.8421628-2.3840266-.0911143-4.6237865-.6708937-6.6883352-1.7307424-.7375522-.3788551-1.8370513-1.1352759-2.6813095-1.8437757-.213839-.1790053-.239235-.2937577-.0977428-.4944671.0764015-.1151823.2172535-.3229831.5286218-.7791994.45158-.6616533.5079208-.7446018.5587128-.8221779.14448-.2217688.3792333-.2411091.6107855-.0588804.0243289.0189105.0243289.0189105.0426824.0333083.0379873.0294402.0379873.0294402.1276204.0990653.0907002.0706996.14448.1123887.166248.1287205 2.2265285 1.7438508 4.8196989 2.7495466 7.4376251 2.8501162 3.6423042-.0496401 6.2615109-1.6873341 6.7308041-4.2020035.5160305-2.7675977-1.6565047-5.1582742-5.9070334-6.4908212-1.329344-.4166762-4.6895175-1.7616869-5.3090528-2.1250697-2.9094471-1.7071043-4.2697358-3.9430584-4.0763845-6.7048539.296216-3.8283059 3.8501677-6.6835796 8.340785-6.702705 2.0082079-.004083 4.0121475.4132378 5.937338 1.2244562.6816382.2873109 1.8987274.9496089 2.3189359 1.2633517.2420093.1777159.2898136.384872.1510957.60836-.0774686.12958-.2055158.3350171-.4754821.7632974l-.0029878.0047276c-.3553311.5640922-.3664286.5817134-.447952.7136572-.140852.2144625-.3064598.2344475-.5604202.0732783-2.0600669-1.3839063-4.3437898-2.0801572-6.8554368-2.130442-3.126914.061889-5.4706057 1.9228561-5.6246892 4.4579402-.0409751 2.2896772 1.676352 3.9613243 5.3858811 5.2358503 7.529819 2.4196871 10.4113092 5.25648 9.869029 9.7292478M26.3725216 5.42669372c4.9022893 0 8.8982174 4.65220288 9.0851664 10.47578358H17.2875686c.186949-5.8235807 4.1828771-10.47578358 9.084953-10.47578358m25.370857 11.57065968c0-.6047069-.4870064-1.0948761-1.0875481-1.0948761h-11.77736c-.28896-7.68927544-5.7774923-13.82058185-12.5059489-13.82058185-6.7282432 0-12.2167755 6.13130641-12.5057355 13.82058185l-11.79421958.0002149c-.59136492.0107446-1.06748731.4968309-1.06748731 1.0946612 0 .0285807.00106706.0569465.00320118.0848825H.99995732l1.6812605 37.0613963c.00021341.1031483.00405483.2071562.01173767.3118087.00170729.0236381.003628.0470614.00554871.0704847l.00362801.0782207.00405483.004083c.25545428 2.5789222 2.12707837 4.6560709 4.67201764 4.7519129l.00576212.0055872h37.4122078c.0177132.0002149.0354264.0004298.0531396.0004298.0177132 0 .0354264-.0002149.0531396-.0004298h.0796027l.0017073-.0015043c2.589329-.0706995 4.6867431-2.1768587 4.9082648-4.787585l.0012805-.0012893.0017073-.0350275c.0021341-.0275062.0040548-.0547975.0057621-.0823037.0040548-.065757.0068292-.1312992.0078963-.1964115l1.8344904-37.207738h-.0012805c.001067-.0186956.0014939-.0376062.0014939-.0565167M176.465457 41.1518926c.720839-2.3512494 2.900423-3.9186779 5.443734-3.9186779 2.427686 0 4.739107 1.6486899 5.537598 3.9141989l.054826.1556978h-11.082664l.046506-.1512188zm13.50267 3.4063683c.014933.0006399.014933.0006399.036906.0008531.021973-.0002132.021973-.0002132.044372-.0008531.53055-.0243144.950595-.4766911.950595-1.0271786 0-.0266606-.000853-.0496953-.00256-.0865936.000427-.0068251.000427-.020262.000427-.0635588 0-5.1926268-4.070748-9.4007319-9.09145-9.4007319-5.020488 0-9.091235 4.2081051-9.091235 9.4007319 0 .3871116.022399.7731567.067838 1.1568557l.00256.0204753.01408.1013102c.250022 1.8683731 1.047233 3.5831812 2.306302 4.9708108-.00064-.0006399.00064.0006399.007253.0078915 1.396026 1.536289 3.291455 2.5833031 5.393601 2.9748936l.02752.0053321v-.0027727l.13653.0228215c.070186.0119439.144211.0236746.243409.039031 2.766879.332724 5.221231-.0661182 7.299484-1.1127057.511777-.2578611.971928-.5423827 1.37064-.8429007.128211-.0968312.243622-.1904632.34346-.2781231.051412-.0452164.092372-.083181.114131-.1051493.468898-.4830897.498124-.6543572.215249-1.0954297-.31146-.4956734-.586228-.9179769-.821744-1.2675504-.082345-.1224254-.154023-.2267215-.214396-.3133151-.033279-.0475624-.033279-.0475624-.054399-.0776356-.008319-.0117306-.008319-.0117306-.013866-.0191956l-.00256-.0038391c-.256208-.3188605-.431565-.3480805-.715933-.0970445-.030292.0268739-.131624.1051493-.14997.1245582-1.999321 1.775381-4.729508 2.3465571-7.455854 1.7760208-.507724-.1362888-.982595-.3094759-1.419919-.5184948-1.708127-.8565509-2.918343-2.3826022-3.267563-4.1490253l-.02752-.1394881h13.754612zM154.831964 41.1518926c.720831-2.3512494 2.900389-3.9186779 5.44367-3.9186779 2.427657 0 4.739052 1.6486899 5.537747 3.9141989l.054612.1556978h-11.082534l.046505-.1512188zm13.502512 3.4063683c.015146.0006399.015146.0006399.037118.0008531.02176-.0002132.02176-.0002132.044159-.0008531.530543-.0243144.950584-.4766911.950584-1.0271786 0-.0266606-.000854-.0496953-.00256-.0865936.000426-.0068251.000426-.020262.000426-.0635588 0-5.1926268-4.070699-9.4007319-9.091342-9.4007319-5.020217 0-9.091343 4.2081051-9.091343 9.4007319 0 .3871116.022826.7731567.068051 1.1568557l.00256.0204753.01408.1013102c.250019 1.8683731 1.04722 3.5831812 2.306274 4.9708108-.00064-.0006399.00064.0006399.007254.0078915 1.396009 1.536289 3.291417 2.5833031 5.393538 2.9748936l.027519.0053321v-.0027727l.136529.0228215c.070184.0119439.144209.0236746.243619.039031 2.766847.332724 5.22117-.0661182 7.299185-1.1127057.511771-.2578611.971917-.5423827 1.370624-.8429007.128209-.0968312.243619-.1904632.343456-.2781231.051412-.0452164.09237-.083181.11413-.1051493.468892-.4830897.498118-.6543572.215246-1.0954297-.311457-.4956734-.586221-.9179769-.821734-1.2675504-.082344-.1224254-.154022-.2267215-.21418-.3133151-.033492-.0475624-.033492-.0475624-.054612-.0776356-.008319-.0117306-.008319-.0117306-.013866-.0191956l-.002346-.0038391c-.256419-.3188605-.431774-.3480805-.716138-.0970445-.030292.0268739-.131623.1051493-.149969.1245582-1.999084 1.775381-4.729452 2.3465571-7.455767 1.7760208-.507717-.1362888-.982582-.3094759-1.419902-.5184948-1.708107-.8565509-2.918095-2.3826022-3.267311-4.1490253l-.027733-.1394881h13.754451zM138.32144123 49.7357905c-3.38129629 0-6.14681004-2.6808521-6.23169343-6.04042014v-.31621743c.08401943-3.35418649 2.85039714-6.03546919 6.23169343-6.03546919 3.44242097 0 6.23320537 2.7740599 6.23320537 6.1960534 0 3.42199346-2.7907844 6.19605336-6.23320537 6.19605336m.00172791-15.67913203c-2.21776751 0-4.33682838.7553485-6.03989586 2.140764l-.19352548.1573553V34.6208558c0-.4623792-.0993546-.56419733-.56740117-.56419733h-2.17651376c-.47409424 0-.56761716.09428403-.56761716.56419733v27.6400724c0 .4539841.10583425.5641973.56761716.5641973h2.17651376c.46351081 0 .56740117-.1078454.56740117-.5641973V50.734168l.19352548.1573553c1.70328347 1.3856307 3.82234434 2.1409792 6.03989586 2.1409792 5.27140956 0 9.54473746-4.2479474 9.54473746-9.48802964 0-5.239867-4.2733279-9.48781439-9.54473746-9.48781439M115.907646 49.5240292c-3.449458 0-6.245805-2.7496948-6.245805-6.1425854 0-3.3928907 2.79656-6.1427988 6.245805-6.1427988 3.448821 0 6.24538 2.7499081 6.24538 6.1427988 0 3.3926772-2.796346 6.1425854-6.24538 6.1425854m.001914-15.5438312c-5.28187 0-9.563025 4.2112903-9.563025 9.4059406 0 5.1944369 4.281155 9.4059406 9.563025 9.4059406 5.281657 0 9.562387-4.2115037 9.562387-9.4059406 0-5.1946503-4.280517-9.4059406-9.562387-9.4059406M94.5919049 34.1890939c-1.9281307 0-3.7938902.6198995-5.3417715 1.7656047l-.188189.1393105V23.2574169c0-.4254677-.1395825-.5643476-.5649971-.5643476h-2.2782698c-.4600414 0-.5652122.1100273-.5652122.5643476v29.2834155c0 .443339.1135587.5647782.5652122.5647782h2.2782698c.4226187 0 .5649971-.1457701.5649971-.5647782v-9.5648406c.023658-3.011002 2.4931278-5.4412923 5.5299605-5.4412923 3.0445753 0 5.516841 2.4421328 5.5297454 5.4630394v9.5430935c0 .4844647.0806524.5645628.5652122.5645628h2.2726775c.481764 0 .565212-.0824666.565212-.5645628v-9.5710848c-.018066-4.8280677-4.0440197-8.7806537-8.9328471-8.7806537M62.8459442 47.7938061l-.0053397.0081519c-.3248668.4921188-.4609221.6991347-.5369593.8179812-.2560916.3812097-.224267.551113.1668119.8816949.91266.7358184 2.0858968 1.508535 2.8774525 1.8955369 2.2023021 1.076912 4.5810275 1.646045 7.1017886 1.6975309 1.6283921.0821628 3.6734936-.3050536 5.1963734-.9842376 2.7569891-1.2298679 4.5131066-3.6269626 4.8208863-6.5794607.4985136-4.7841067-2.6143125-7.7747902-10.6321784-10.1849709l-.0021359-.0006435c-3.7356476-1.2047686-5.4904836-2.8064071-5.4911243-5.0426086.1099976-2.4715346 2.4015793-4.3179454 5.4932602-4.4331449 2.4904317.0062212 4.6923065.6675996 6.8557356 2.0598624.4562232.2767364.666607.2256796.9733188-.172263.035242-.0587797.1332787-.2012238.543367-.790093l.0012815-.0019308c.3829626-.5500403.5089793-.7336731.5403767-.7879478.258441-.4863266.2214903-.6738208-.244985-1.0046173-.459427-.3290803-1.7535544-1.0024722-2.4936356-1.2978721-2.0583439-.8211991-4.1863175-1.2199998-6.3042524-1.1788111-4.8198184.1046878-8.578747 3.2393171-8.8265087 7.3515337-.1572005 2.9703036 1.350301 5.3588174 4.5000778 7.124567.8829712.4661613 4.1115618 1.6865902 5.6184225 2.1278667 4.2847814 1.2547527 6.5186944 3.5630343 6.0571315 6.2864205-.4192725 2.4743234-3.0117991 4.1199394-6.6498372 4.2325647-2.6382344-.0549182-5.2963324-1.0217793-7.6043603-2.7562084-.0115337-.0083664-.0700567-.0519149-.1779185-.1323615-.1516472-.1130543-.1516472-.1130543-.1742875-.1300017-.4705335-.3247898-.7473431-.2977598-1.0346184.1302162-.0346012.0529875-.3919333.5963776-.5681431.8632459"
                         ></path>
+                       
                     </g>
-                </svg>
+                </svg> -->
+               <img src="./assets/img/logobeauty.png" alt="anhlogo" class="header__logo-img">
+
             </a>
             </div>
-        <div class="header__search">
+        <form class="header__search" action="index.php" method="POST">
             <div class="header__search-input-swap">
-                <input type="text" class="header__search-input" placeholder="Tìm kiếm sản phẩm trong shop">
+                <input type="text" name="search_Keywords" class="header__search-input" autocomplete="off" placeholder="Tìm kiếm sản phẩm trong shop">
                 <!-- search history -->
                 <div class="header__search-history">
-                    <h3 class="header__search-history-heading">Lịch sử tìm kiếm</h3>
+                    <h3 class="header__search-history-heading" >Lịch sử tìm kiếm</h3>
                     <ul class="header__search-history-list">
                         <li class="header__search-history-item">
                             <a href="">
@@ -357,7 +280,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="header__search-select">
+            <!-- <div class="header__search-select">
                 <span class="header__search-select-lable">Trong Shop</span>
                 <i class=" header__search-select-icon fa-solid fa-chevron-down"></i>
             <ul class="header__search-option">
@@ -370,18 +293,101 @@
                     <i class="fa-solid fa-check"></i>
                 </li>
             </ul>
-            </div>
-        <button class="header__search-btn">
-            <i class=" header__search-btn-icon fa-solid fa-magnifying-glass"></i>
-        </button>
-        </div>
+            </div> -->
+            <button name="btn_search" class="header__search-btn">
+                <i class=" header__search-btn-icon fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+   
+
+        <!-- Giỏ hàng -->
+        <div class="header__cart">   
+                    <div  class="header__cart-swap">               
+                        <i class=" header__cart-icon fa-sharp fas fa-cart-shopping"></i>
+                                <?php
+                                    $ok=1;
+                                    if(isset($_SESSION['cart']) && !empty($_SESSION['cart'])){                 
+                                    foreach($_SESSION['cart'] as $k=>$v){ // $k là id khách hàng ,$v id sản phẩm của khách hàng đó
+                                    if(!empty($v)){
+                                    $ok=2;
+                                    }
+                                    }
+                                    }
+                                    if ($ok != 2){        
+                                    ?>
+                                <span class="header__cart-swap-notice">0</span>
+                                    <!-- no cart : header__cart-list-no-cart  (them header__cart-list-no-cart
+                                        vao header__cart-list de chuyen ve no cart )-->
+                                    <div class="header__cart-list header__cart-list-no-cart  ">
+                                        <img src="./assets/img/no_cart.png" alt="no-cart-img" class=" header__cart-list-no-cart-img">
+                                        <span class="header__cart-list-no-cart-msg">
+                                            Chưa có sản phẩm
+                                        </span>
+                                    </div>
+                                    <?php         
+                                    }else{
+                                        $items = $_SESSION['cart'][$customer_id] ?? [];
+                                    ?>
+                                        <span class="header__cart-swap-notice"><?php echo count($items)?></span>
+                                        <div class="header__cart-list ">    
+                                                <h4 class="header__cart-heading">Sản phẩm đã thêm</h4>
+                                    <?php
+                                    $item = [];
+                                    foreach($_SESSION['cart'][$customer_id] ?? [] as $product_id =>$value){
+                                        $item[]= $product_id; // chứa các id sản phẩm
+                                    }
+                                    if (!empty($item)) { 
+                                        $str= implode(",",$item); // chuyển mảng thành chuỗi
+                                        $conn = mysqli_connect("localhost","root","","MYPHAM");
+                                        $sql = " SELECT * FROM  SANPHAM WHERE id IN ($str)";
+                                        $result = mysqli_query($conn,$sql);
+                                        while($row = mysqli_fetch_array($result)){
+                                    ?>        
+                                    <a href="/View/giohang.php" class="header__cart-list-item__link">                 
+                                        <ul class="header__cart-list-item">                           
+                                            <li class="header__cart-item">
+                                                <img src="<?php echo $row['urlImg']?>" alt="" class="header__cart-img">
+                                                <div class="header__cart-item-info">
+                                                            <div class="header__cart-item-head">
+                                                                <h5 class="header__cart-item-name"><?php echo $row['title']?></h5>
+                                                                <div class="header__cart-item-price-wrap">
+                                                                    <span class="header__cart-item-price"><?php echo $row['priceNew'].'đ'?></span>
+                                                                    <!-- <span class="header__cart-item-multiply">x</span>
+                                                                    <span class="header__cart-item-qnt">2</span> -->
+                                                                </div>
+                                                            </div>
+                                                            <div class="header__cart-item-body">
+                                                                <span class="header__cart-item-description">
+                                                                    Phân loại hàng: chính hãng
+                                                                </span>
+                                                                <!-- <span class="header__cart-item-remove">Xóa</span> -->
+                                                        <a href="xoagiohang.php?productid=<?php echo $row['id']?>"  class="header__cart-item-remove">Xóa</a>
+
+                                                            </div>
+                                                </div>  
+                                            </li>                                        
+                                        </ul>
+                                        </a>  
+                                        <?php
+                                            }
+                                        }
+                                        ?>  
+                                        <a class=" header__cart-view btn btn--primary" href="/View/giohang.php">Xem giỏ hàng</a>
+                                 </div>  
+                            <?php
+                            
+                            }
+                            ?>   
+                                
+                    </div>
+         </div>    
         <!-- cart layout -->
-            <div class="header__cart">
+            <!-- <div class="header__cart">
                <div class="header__cart-swap">
                     <i class=" header__cart-icon fa-sharp fas fa-cart-shopping"></i>
                     <span class="header__cart-swap-notice">3</span>
-                    <!-- no cart : header__cart-list-no-cart  (them header__cart-list-no-cart
-                         vao header__cart-list de chuyen ve no cart )-->
+                     no cart : header__cart-list-no-cart  (them header__cart-list-no-cart
+                         vao header__cart-list de chuyen ve no cart )
                     <div class="header__cart-list  ">
                         <img src="./assets/img/no_cart.png" alt="no-cart-img" class=" header__cart-list-no-cart-img">
                         <span class="header__cart-list-no-cart-msg">
@@ -390,7 +396,7 @@
                         <h4 class="header__cart-heading">Sản phẩm đã thêm</h4>
                         <ul class="header__cart-list-item">
                     
-                            <!-- cart item -->
+                            cart item
                             <li class="header__cart-item">
                                 <img src="data:image/jpeg;base64,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" alt="" class="header__cart-img">
                                 <div class="header__cart-item-info">
@@ -575,7 +581,7 @@
                         <button class=" header__cart-view btn btn--primary">Xem giỏ hàng</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
    </div>
  </div>
 
@@ -585,15 +591,26 @@
         <div class="grid__row app__content">
             <div class="grid__column-2">
             <nav class="category">
-                    <h3 class="category-heading">
+            <h3 class="category-heading">
                         <i class=" category-heading-icon fas fa-list"></i>
                         Danh mục
                     </h3>
+                    <!-- xử lý danh mục -->
+                <?php 
+                $conn = mysqli_connect("localhost","root","","MYPHAM");
+                
+                $sql = "SELECT * FROM DANHMUC";
+                $result = mysqli_query($conn,$sql);
+                while($row = mysqli_fetch_array($result)){
+                ?>
+                
                     <ul class="category-list">
-                        <li class="category-item category-item--active">
-                            <a href="#" class="category-item__link">Kem dưỡng da</a>
-                        </li>
-                        <li class="category-item">
+                        <li class="category-item category-item--active" v-bind:class="{ black :  <?php echo $row['id']?> ==1 }" >
+                            <?php 
+                             echo '<a href="index.php?iddm='.$row['id'] .'"' . 'class="category-item__link">'.$row['loaisanpham'].'</a>'
+                            ?>
+                            </li>
+                        <!-- <li class="category-item">
                             <a href="#" class="category-item__link">Kem trị mụn</a>
                         </li>
                         <li class="category-item">
@@ -604,560 +621,319 @@
                         </li>
                         <li class="category-item">
                             <a href="#" class="category-item__link">Kem nền</a>  
-                        </li>
+                        </li> -->
                         </ul>
+                        <?php 
+                           }
+                        ?>
                 </nav>
             </div>
                 <div class="grid__column-10">
-                <div class="home-filter">
+                <form method="POST" action="index.php" class="home-filter">
                     <span class="home-filter__lable">Sắp xếp theo</span>             
-                    <button class="home-filter-btn btn">Phổ biến</button>
-                    <button class="home-filter-btn btn btn--primary ">Mới nhất</button>
-                    <button class="home-filter-btn btn">Bán chạy</button>            
-                    <div class="select-input">
+                    <button  class="home-filter-btn btn btn--primary">Mới Nhất</button>
+                    <button type="submit" name="upPrice" class="home-filter-btn btn  ">Giá Tăng Dần</button>
+                    <button type="submit" name="downPrice" class="home-filter-btn btn">Giá Giảm Dần</button>            
+                    <!-- <div class="select-input">
                         <span class="select-input-lable">Giá</span>           
                             <i class=" select-input-icon fa-solid fa-chevron-down"></i>  
-                            <ul class="select-input-list">
+                            <form class="select-input-list" method="POST" action="index.php">
                                 <li class="select-input-item">
-                                    <a href="" class="select-input-item-link">
+                                    <button type="submit" name="upPrice" class="select-input-item-link">
                                         Giá: Thấp đến Cao
-                                    </a>
+                                    </button>
                                 </li>
                                 <li class="select-input-item">
-                                    <a href="" class="select-input-item-link">
+                                    <button type="submit" name="downPrice" class="select-input-item-link">
                                         Giá: Cao đến Thấp
-                                    </a>
+                                    </button>
                                 </li>
-                            </ul>                    
-                    </div>
+                            </form>                    
+                    </div> -->
                 
                     <div class="home-filter__para">
-                    <span class="home-filter__para-num">
-                        <span class="home-filter__para-current">1</span> /15                   
-                    </span>
                     <div class="home-filter__para-control">
-                        <a href="" class="home-filter__para-btn home-filter__para-btn--disabled">
-                            <i class="home-filter__para-icon fa-solid fa-chevron-left"></i>
-                        </a>
-                        <a href="" class="home-filter__para-btn">
-                            <i class="home-filter__para-icon fa-solid fa-chevron-right"></i>
-                        </a>
+                        <!--phân trang  -->
+                        <?php
+                            $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                           if($current_page >1){
+                           echo  ' <a href="index.php?page='.($current_page-1).'"'.'class="home-filter__para-btn">
+                           <i class="home-filter__para-icon fa-solid fa-chevron-left"></i>
+                           </a>';
+                           }
+                           echo  ' <a href="index.php?page='.($current_page+1).'"'.'class="home-filter__para-btn">
+                           <i class="home-filter__para-icon fa-solid fa-chevron-right"></i>
+                           </a> ';
+                         ?>
                     </div>
                 </div>
-                </div>
-                <div class="home-product">
-                    <div class="grid">
-                        <div class="grid__row">
-                            <!-- product item -->
-                            <div class="grid__column-2-4" id="product__item-id" >
-                                <div class="home-product-item" >
-                                    <div class="home-product-item-img" style="background-image: url(https://studiovietnam.com/wp-content/uploads/2022/08/mau-anh-chup-my-pham-02-1024x1024.jpg);"></div>
-                                    <h4 class="home-product-item-name">kem dưỡng da mặt nhãn hàng ohui cao cấp đến từ Hàn Quốc</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">1.499.000đ</span>
-                                        <span class="home-product-item-price-curent">999.000đ</span>
+                </form>
+            <div class="home-product">
+              <div class="grid">
+                  <div class="row">
+               
+                        <?php
+                        $conn = mysqli_connect("localhost","root","","MYPHAM");                  
+                            if(isset($_GET['iddm'])){
+                            $countSql = "SELECT COUNT(id) AS total FROM SANPHAM WHERE iddm = ".$_GET['iddm'];
+                            }else{
+                                $countSql = "SELECT COUNT(id) AS total FROM SANPHAM";
+                            }
+                            // phân trang
+                            $limit = 10; // sô sản phẩm trong 1 trang
+                            $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+                            // Tìm Start
+                            $start = ($current_page - 1) * $limit; // só sản phẩm bắt đầu của 1 trang tới limit
+
+                            $countResult = mysqli_query($conn, $countSql);
+                            $countRow = mysqli_fetch_assoc($countResult);
+                            $total_records = $countRow['total'];
+
+                            $total_page = ceil($total_records / $limit);
+
+                        if(isset($_GET['iddm'])){
+                            $sql = "SELECT * , ((priceOld - priceNew) / priceOld * 100) AS priceDiscount  FROM SANPHAM WHERE iddm = ".$_GET['iddm']. " LIMIT " . $start. "," . $limit; 
+                        }else if(isset($_POST['btn_search'])){
+                            $keyWords = $_POST['search_Keywords'];
+                            $conn = mysqli_connect("localhost","root","","MYPHAM");
+                            $sql = " SELECT * , ((priceOld - priceNew) / priceOld * 100) AS priceDiscount  FROM  SANPHAM WHERE title LIKE '%$keyWords%' ORDER BY id ASC";
+                        }else if(isset($_POST['upPrice'])){
+                            $sql = " SELECT * , ((priceOld - priceNew) / priceOld * 100) AS priceDiscount  FROM   SANPHAM  ORDER BY CAST(REPLACE(priceNew, '.', '') AS DECIMAL(10, 3)) ASC LIMIT $start , $limit";
+                        }else if(isset($_POST['downPrice'])){
+                            $sql = " SELECT * , ((priceOld - priceNew) / priceOld * 100) AS priceDiscount  FROM  SANPHAM  ORDER BY CAST(REPLACE(priceNew, '.', '') AS DECIMAL(10, 3)) DESC LIMIT $start , $limit";
+                        }else{
+                            $sql = "SELECT * , ((priceOld - priceNew) / priceOld * 100) AS priceDiscount  FROM SANPHAM LIMIT ". $start. "," . $limit; 
+                        }
+                        $result = mysqli_query($conn, $sql);
+                        while($row = mysqli_fetch_array($result)){
+                        ?>
+                  
+                  <a  href="/View/chitietsanpham.php?idsp=<?php echo $row['id'];?>" class="col l-2-5 m-4 c-6 product__item-id" style="text-decoration: none">
+                            <div class="home-product-item" >           
+                                <div class="home-product-item-img" style="background-image: url(<?php echo $row['urlImg']?>);"></div>
+                                <h4 class="home-product-item-name"><?php echo $row['title']?></h4>
+                                <div class="home-product-item-price">
+                                    <span class="home-product-item-price-old"><?php echo $row['priceOld']?></span>
+                                    <span class="home-product-item-price-curent"><?php echo $row['priceNew']?></span>
+                                </div>
+                                    <div class="home-product-item-action">
+                                    <span class="home-product-item__like home-product-item__like-liked" id="icon_heart">
+                                        <i class="home-product-item__like-icon-empty fa-regular fa-heart" id="heart_empty"></i>
+                                        <i class="home-product-item__like-icon-fill fa-solid fa-heart" id="hearted"></i>                               
+                                    </span>
+                                    <div class="home-product-item__rating">
+                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
+                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
+                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
+                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
+                                        <i class="home-product-item__star--gold  fa-solid fa-star"></i>
                                     </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like home-product-item__like-liked">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">999 đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">Ohui</span>
-                                        <span class="home-product-item-origin-name">Hàn Quốc</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">35%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
+                                    <span class="home-product-item__sold"><?php echo $row['sold']?> đã bán</span>
+                                </div>
+                                <div class="home-product-item-origin">
+                                    <span class="home-product-item-brand"><?php echo $row['brand']?></span>
+                                    <span class="home-product-item-origin-name"><?php echo $row['nation']?></span>
+                                </div>
+                                <div class="home-product-item-favourite">
+                                    <i class="  fas fa-check"></i>
+                                    <span>Yêu thích</span>
                                 
                                 </div>
+                                <div class="home-product-item__sale-off">
+                                    <span class="home-product-item__sale-off-percent" id="price_discount"><?php echo intval($row['priceDiscount']).'%'?></span>
+                                    <span class="home-product-item__sale-off-label">GIẢM</span>
+                                </div>
                             </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://venuko.vn/Upload/2021/7/31/top-5-my-pham-ohui-han-quoc-duoc-phai-dep-san-lung-nhieu-nhat-hinh-anh-1.png);"></div>
-                                    <h4 class="home-product-item-name">kem điều trị vùng mắt cao cấp đến từ Hàn Quốc</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">1.299.000đ</span>
-                                        <span class="home-product-item-price-curent">999.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like ">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">1.2k đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">Ohui</span>
-                                        <span class="home-product-item-origin-name">Hàn Quốc</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">15%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://i0.wp.com/shopmyphamohuiwhoo.com/images/shopmyphamohuiwhoocom/2019/03/%E1%BA%A3nh-1-1.jpg);"></div>
-                                    <h4 class="home-product-item-name">kem body nhãn hàng ohui cao cấp đến từ Hàn Quốc</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">2.300.000đ</span>
-                                        <span class="home-product-item-price-curent">1.999.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like home-product-item__like-liked">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class=" fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">788 đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">Ohui</span>
-                                        <span class="home-product-item-origin-name">Hàn Quốc</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">40%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://venuko.vn/Upload/2021/7/31/top-5-my-pham-ohui-han-quoc-duoc-phai-dep-san-lung-nhieu-nhat-hinh-anh-6.png);"></div>
-                                    <h4 class="home-product-item-name">kem dưỡng ẩm ohui cao cấp đến từ Hàn Quốc</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">1.399.000đ</span>
-                                        <span class="home-product-item-price-curent">1.199.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like ">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class=" home-product-item__star--gold fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">665 đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">Ohui</span>
-                                        <span class="home-product-item-origin-name">Hàn Quốc</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">15%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://png.pngtree.com/template/20211025/ourlarge/pngtree-beauty-cosmetics-flesh-color-gradient-skin-care-products-e-commerce-vertical-image_653790.jpg);"></div>
-                                    <h4 class="home-product-item-name">kem nền chính hãng cao cấp đến từ Nhật </h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">1.699.000đ</span>
-                                        <span class="home-product-item-price-curent">1.299.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like home-product-item__like-liked">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class=" home-product-item__star--gold fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">5.4k đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">somano</span>
-                                        <span class="home-product-item-origin-name">Nhật Bản</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">25%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://salt.tikicdn.com/cache/w1200/ts/product/5c/82/cf/089376996d03d31e7a006df5306eb561.jpg);"></div>
-                                    <h4 class="home-product-item-name">Tinh chất vàng 24k chống lão hóa chính hãng</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">5.999.000đ</span>
-                                        <span class="home-product-item-price-curent">3.999.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like ">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">500 đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">Opanal</span>
-                                        <span class="home-product-item-origin-name">Pháp</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">40%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://i0.wp.com/shopmyphamohuiwhoo.com/images/shopmyphamohuiwhoocom/2019/03/d53fcbbc39fa9a52cd2e1f2e08388c70.jpg);"></div>
-                                    <h4 class="home-product-item-name">kem dưỡng da ohui chính hãng</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">1.799.000đ</span>
-                                        <span class="home-product-item-price-curent">1.200.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like home-product-item__like-liked">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="  fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">2.4k đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">Ohui</span>
-                                        <span class="home-product-item-origin-name">Hàn Quốc</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">20%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx-hYVI1nCx3pfpEbRKwC8n-HCrjJFen7J-w&usqp=CAU);"></div>
-                                    <h4 class="home-product-item-name">kem nền cao cấp chính hãng đến từ Ohui</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">1.200.000đ</span>
-                                        <span class="home-product-item-price-curent">890.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like ">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class=" home-product-item__star--gold fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">7.8k đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">Ohui</span>
-                                        <span class="home-product-item-origin-name">Hàn Quốc</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">25%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://whoovietnam.com/wp-content/uploads/2022/09/OHUI-TF_FS_BRIGHTENING-DUAL-SERUM-50ML-5SP-whoo_9.jpg );"></div>
-                                    <h4 class="home-product-item-name">Set bộ huyết thanh chống lão hóa chính hãng</h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">3.199.000đ</span>
-                                        <span class="home-product-item-price-curent">1.790.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like home-product-item__like-liked">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">3.1k đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">komano</span>
-                                        <span class="home-product-item-origin-name">Nhật Bản</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">35%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                            <div class="grid__column-2-4">
-                                <a class="home-product-item" href="#">
-                                    <div class="home-product-item-img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5yKVsd1yqLjygNJSIwjqpQ7BvFVHJweZmJQ&usqp=CAU);"></div>
-                                    <h4 class="home-product-item-name">Bộ dưỡng tái sinh chính hãng </h4>
-                                    <div class="home-product-item-price">
-                                        <span class="home-product-item-price-old">2.390.000đ</span>
-                                        <span class="home-product-item-price-curent">1.999.000đ</span>
-                                    </div>
-                                        <div class="home-product-item-action">
-                                        <span class="home-product-item__like ">
-                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>                               
-                                        </span>
-                                        <div class="home-product-item__rating">
-                                            <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="home-product-item__star--gold  fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <span class="home-product-item__sold">999 đã bán</span>
-                                    </div>
-                                    <div class="home-product-item-origin">
-                                        <span class="home-product-item-brand">komano</span>
-                                        <span class="home-product-item-origin-name">Nhật Bản</span>
-                                    </div>
-                                    <div class="home-product-item-favourite">
-                                        <i class="  fas fa-check"></i>
-                                        <span>Yêu thích</span>
-                                    
-                                    </div>
-                                    <div class="home-product-item__sale-off">
-                                        <span class="home-product-item__sale-off-percent">30%</span>
-                                        <span class="home-product-item__sale-off-label">GIẢM</span>
-                                    </div>
-                                
-                                </a>
-                            </div>
-                                                                        
-                        </div>
-                    </div>
-                </div>
-                <ul class="Pagination home-product__Pagination">
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">
-                            <i class="Pagination-item__icon fa-solid fa-chevron-left " ></i>
-                        </a>
-                    </li>
-                    <li class="Pagination-item Pagination-item--active">
-                        <a href="" class="Pagination-item__link">1</a>
-                    </li>
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">2</a>
-                    </li>
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">3</a>
-                    </li>
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">4</a>
-                    </li>
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">5</a>
-                    </li>
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">...</a>
-                    </li>
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">15</a>
-                    </li>
-                    <li class="Pagination-item">
-                        <a href="" class="Pagination-item__link">
-                            <i class="Pagination-item__icon fa-solid fa-chevron-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                       </a>
+                            <?php                          
+                            }
+                            ?>
+                  </div>
+                  <?php
+               
+                //   $total_page = ceil($total_records / $limit);
+                  // Giới hạn current_page trong khoảng 1 đến total_page
+                  if ($current_page > $total_page){
+                   $current_page = $total_page;
+                  }
+                   else if ($current_page < 1){
+                  $current_page = 1;
+                  }          
+                       echo '<ul class="Pagination home-product__Pagination">';      
+                     if ($current_page > 1 && $total_page > 1) {
+                        echo '<li class="Pagination-item">';
+                        if(isset($_GET['iddm'])){
+                        echo '<a href="index.php?iddm=' . $_GET['iddm'] . '&page=' . ($current_page - 1) . '" class="Pagination-item__link">';                      
+                        echo '<i class="Pagination-item__icon fa-solid fa-chevron-left"></i>';
+                        echo '</a>';
+                        }else{
+                            echo  ' <a href="index.php?page='.($current_page-1).'"'.'class="Pagination-item__link">
+                                 <i class="Pagination-item__icon fa-solid fa-chevron-left " ></i>
+                                </a> ';
+                        }
+                        echo '</li>';
+                    }
+                    for ($i = 1; $i <= $total_page; $i++){
+                           echo ' <li class="Pagination-item ">';     
+                                    // Nếu là trang hiện tại thì hiển thị thẻ span và không cho ấn vào
+                                    // ngược lại hiển thị thẻ a để chuyển qua trang
+                                    if ($i == $current_page){
+                                       echo  '<span class="Pagination-item__link " style="  background-color: var(--primary-color); color: var(--white-color);">'.$i.'</span>';
+                                    }else{
+                                        if(isset($_GET['iddm'])){ // hiển thị số phân trang khi ở trang danh mục
+                                            echo '<a href="index.php?iddm=' .$_GET['iddm'] . '&page=' . $i . '" class=" Pagination-item__link">' . $i . '</a>';
 
-       </div>
-    </div>
+                                        }else{
+                                         echo ' <a href="index.php?page='.$i.'"'. 'class="Pagination-item__link">'.$i.'</a>';
+
+                                        }
+                                       
+                                    }
+                                }
+                            echo '</li>';
+                        
+                            if ($current_page < $total_page && $total_page > 1) {
+                                echo '<li class="Pagination-item">';
+                                if(isset($_GET['iddm'])){
+                                echo '<a href="index.php?iddm=' . $_GET['iddm'] . '&page=' . ($current_page + 1) . '" class="Pagination-item__link">';
+                                echo '<i class="Pagination-item__icon fa-solid fa-chevron-right"></i>';
+                                echo '</a>';
+                            }else{
+                                echo  ' <a href="index.php?page='.($current_page+1).'"'.'class="Pagination-item__link">
+                                        <i class="Pagination-item__icon fa-solid fa-chevron-right"></i>
+                                        </a> ';
+                            }
+                                echo '</li>';
+                            }
+                       echo' </ul>';
+                        ?>
+                    
+              </div>
+           </div>
+        
+   <!-- <li class="Pagination-item">
+                                <a href="" class="Pagination-item__link">2</a>
+                            </li>
+                            <li class="Pagination-item">
+                                <a href="" class="Pagination-item__link">3</a>
+                            </li>
+                            <li class="Pagination-item">
+                                <a href="" class="Pagination-item__link">4</a>
+                            </li>
+                            <li class="Pagination-item">
+                                <a href="" class="Pagination-item__link">5</a>
+                            </li>
+                            <li class="Pagination-item">
+                                <a href="" class="Pagination-item__link">...</a>
+                            </li>
+                            <li class="Pagination-item">
+                                <a href="" class="Pagination-item__link">15</a>
+                            </li> -->
  </div>
     <footer class="footer">
   <div class="grid">
-    <div class="grid__row">
-        <div class="grid__column-2-4">
-            <h3 class="footer-heading">CHĂM SÓC KHÁCH HÀNG</h3>
-            <ul class="footer-list">
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                        Trung tâm trợ giúp
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                       TL-SHOP Mall
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                    Hướng dẫn mua hàng
-                    </a>
-                </li>
-            </ul>
+    <div class="row">
+        
+        <div class="col l-3 m-6 c-12">
+            <div class="footer-content">
+                <div class="">
+                <h3 class="footer-heading">CHĂM SÓC KHÁCH HÀNG</h3>
+                <ul class="footer-list">
+                    <li class="footer-item">
+                        <a href="" class="footer-item__link">
+                            Trung tâm trợ giúp
+                        </a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="" class="footer-item__link">
+                        TL-SHOP Mall
+                        </a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="" class="footer-item__link">
+                        Hướng dẫn mua hàng
+                        </a>
+                    </li>
+                </ul>
+                </div>
+            </div>
         </div>
-        <div class="grid__column-2-4">
-            <h3 class="footer-heading">VỀ TL-SHOP</h3>
-            <ul class="footer-list">
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                        Giới thiệu về TL-shop
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                       Tuyển dụng
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                    điều khoản TL-shop
-                    </a>
-                </li>
-            </ul>
+        <div class="col l-3 m-6 c-12">
+            <div class="footer-content">
+                    <div class="">
+                        <h3 class="footer-heading">VỀ TL-SHOP</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">
+                                    Giới thiệu về TL-shop
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">
+                                Tuyển dụng
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">
+                                điều khoản TL-shop
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+            </div>
         </div>
-        <div class="grid__column-2-4">
-            <h3 class="footer-heading">DANH MỤC</h3>
-            <ul class="footer-list">
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                        kem dưỡng da mặt
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                       kem dưỡng ẩm
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                    Son môi
-                    </a>
-                </li>
-            </ul>
+        <div class="col l-3 m-6 c-12">
+            <div class="footer-content">
+                    <div class="">
+                    <h3 class="footer-heading">DANH MỤC</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                                kem dưỡng da mặt
+                            </a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                            kem dưỡng ẩm
+                            </a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                            Son môi
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="grid__column-2-4">
-            <h3 class="footer-heading">THEO DÕI TL-SHOP</h3>
-            <ul class="footer-list">
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                    <i class="footer-item__link-icon fa-brands fa-facebook"></i>    
-                        Facebook
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                        <i class="footer-item__link-icon fa-brands fa-instagram"></i> 
-                       fa-instagram
-                    </a>
-                </li>
-                <li class="footer-item">
-                    <a href="" class="footer-item__link">
-                        <i class=" footer-item__link-icon fa-brands fa-linkedin"></i>
-                    Linkedln
-                    </a>
-                </li>
-            </ul>
+        <div class="col l-3 m-6 c-12">
+            <div class="footer-content">
+                <div class="">
+                    <h3 class="footer-heading">THEO DÕI TL-SHOP</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                            <i class="footer-item__link-icon fa-brands fa-facebook"></i>    
+                                Facebook
+                            </a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                                <i class="footer-item__link-icon fa-brands fa-instagram"></i> 
+                            fa-instagram
+                            </a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                                <i class=" footer-item__link-icon fa-brands fa-linkedin"></i>
+                            Linkedln
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="grid__column-2-4">
+        <!-- <div class="col l-3 m-6 c-12">
             <h3 class="footer-heading">VÀO TL-SHOP TRÊN ỨNG DỤNG</h3>
             <div class="footer-dowload">
                 <img src="/assets/img/img-QR.png" alt="img qr" class="footer-dowload-qr">
@@ -1166,7 +942,7 @@
                   <img src="/assets/img/ing-appstore.png" alt="app store" class="footer-dowload-apps-img">
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>  
   </div>
   <div class="footer__bottom">
